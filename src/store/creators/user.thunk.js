@@ -17,21 +17,3 @@ export const getUsersData = () => {
 		}
 	};
 };
-
-export const fetchUserPostsData = (id) => {
-    return async (dispatch) => {
-        const fetchData = async () => {
-            const response = await fetch(`https://jsonplaceholder.typicode.com/posts?userId=${id}`);
-			const data = await response.json();
-
-            return data;
-        }
-
-        try {
-			const userPostsData = await fetchData();
-			dispatch(userActions.setUserPosts({data: userPostsData, userId: id}));
-		} catch (error) {
-			throw new Error('Error fetching user posts data');
-		}
-    }
-}

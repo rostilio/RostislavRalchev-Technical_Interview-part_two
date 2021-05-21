@@ -2,13 +2,12 @@ import React, { useState } from 'react';
 import Card from '../UI/Card';
 import Post from './Post';
 import './User.scss';
-import { fetchUserPostsData } from '../store/creators/user.thunk';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import UserModel from '../model/user';
+import axios from 'axios';
 
 const User = (props) => {
 	const dispatch = useDispatch();
-	const currentPosts = useSelector((state) => state.currentUserPosts);
 	const [user, setUser] = useState(
 		new UserModel(
 			props.user.id,
@@ -26,8 +25,12 @@ const User = (props) => {
 	const [postVisibility, setPostVisibility] = useState(false);
 
 	const handleUserPosts = () => {
-		dispatch(fetchUserPostsData(user.id));
-		setUser({ ...user, posts: currentPosts });
+		fetchUserPosts();
+	};
+
+	const fetchUserPosts = async () => {
+		const response = await axios.get(`https://jsonplaceholder.typicode.com/posts?userId=${user.id}`);
+		setUser({ ...user, posts: response.data });
 	};
 
 	const handleCollapsiblePosts = (event) => {
@@ -120,12 +123,6 @@ const User = (props) => {
 			<div className='posts-button'>
 				<button onClick={handleUserPosts}>Get user's posts</button>
 			</div>
-			{/* {currentPosts && currentPosts.length !== 0 ? (
-				<section className='posts-list'>
-					<button onClick={handleCollapsiblePosts}>User post's list</button>
-					<div>{postVisibility && user.posts.map((postEl) => <Post key={postEl.id} post={postEl} />)}</div>
-				</section>
-			) : null} */}
 			{user.posts.length !== 0 && (
 				<section className='posts-list'>
 					<button onClick={handleCollapsiblePosts}>User post's list</button>

@@ -2,7 +2,6 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialUserState = {
 	users: [],
-	currentUserPosts: [],
 };
 
 const userSlice = createSlice({
@@ -17,7 +16,6 @@ const userSlice = createSlice({
 			const triggeredUser = state.users[userIndex];
 			triggeredUser.posts = action.payload.data;
 			state.users[userIndex] = triggeredUser;
-			state.currentUserPosts = action.payload.data;
 		},
 	},
 });
