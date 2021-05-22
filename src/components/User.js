@@ -2,40 +2,30 @@ import React, { useState } from 'react';
 import Card from '../UI/Card';
 import Post from './Post';
 import './User.scss';
-import { useDispatch } from 'react-redux';
 import UserModel from '../model/user';
 import axios from 'axios';
+import baseURL from '../API/api';
 
 const User = (props) => {
-	const dispatch = useDispatch();
 	const [user, setUser] = useState(
 		new UserModel(
-			props.user.id,
-			props.user.name,
-			props.user.username,
-			props.user.email,
-			props.user.address.street,
-			props.user.address.suite,
-			props.user.address.city,
-			props.user.phone,
-			props.user.website,
+			props.user?.id,
+			props.user?.name,
+			props.user?.username,
+			props.user?.email,
+			props.user?.address.street,
+			props.user?.address.suite,
+			props.user?.address.city,
+			props.user?.phone,
+			props.user?.website,
 			[]
 		)
 	);
 	const [postVisibility, setPostVisibility] = useState(false);
 
-	const handleUserPosts = () => {
-		fetchUserPosts();
-	};
-
-	const fetchUserPosts = async () => {
-		const response = await axios.get(`https://jsonplaceholder.typicode.com/posts?userId=${user.id}`);
+	const handleUserPosts = async () => {
+		const response = await axios.get(baseURL + `posts?userId=${user.id}`);
 		setUser({ ...user, posts: response.data });
-	};
-
-	const handleCollapsiblePosts = (event) => {
-		event.preventDefault();
-		return postVisibility ? setPostVisibility(false) : setPostVisibility(true);
 	};
 
 	return (
@@ -125,7 +115,7 @@ const User = (props) => {
 			</div>
 			{user.posts.length !== 0 && (
 				<section className='posts-list'>
-					<button onClick={handleCollapsiblePosts}>User post's list</button>
+					<button onClick={() => {setPostVisibility(!postVisibility)}}>User post's list</button>
 					<div>{postVisibility && user.posts.map((postEl) => <Post key={postEl.id} post={postEl} />)}</div>
 				</section>
 			)}

@@ -12,9 +12,13 @@ const userSlice = createSlice({
 			state.users = action.payload;
 		},
 		setUserPosts(state, action) {
+			// userIds start counting from 1
 			const userIndex = action.payload.userId - 1;
+			// finding the current user from state
 			const triggeredUser = state.users[userIndex];
+			// setting posts property
 			triggeredUser.posts = action.payload.data;
+			// setting state
 			state.users[userIndex] = triggeredUser;
 		},
 	},
